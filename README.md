@@ -6,7 +6,7 @@ Each part's exercises can be found in the appropriate directory.
 Progress:
 
 - [x] [Part 0](./Part0/)
-- [ ] [Part 1](./Part1/)
+- [x] [Part 1](./Part1/)
 - [ ] [Part 2](./Part2/)
 - [ ] [Part 3](./Part3/)
 - [ ] [Part 4](./Part4/)
