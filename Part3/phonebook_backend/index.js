@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require("cors");
+const morgan = require("morgan");
 const app = express();
 
 let persons = [
@@ -33,7 +35,30 @@ const generateId = () => {
   return String(newId);
 };
 
+app.use(cors());
 app.use(express.json());
+// Log methods other than POST with tiny
+app.use(
+  morgan("tiny", {
+    skip: (req, _res) => {
+      return req.method === "POST";
+    },
+  }),
+);
+// Log POST with added body token
+morgan.token("body", function (req, _res) {
+  return JSON.stringify(req.body);
+});
+app.use(
+  morgan(
+    ":method :url :status :res[content-length] :body - :response-time ms",
+    {
+      skip: (req, _res) => {
+        return req.method !== "POST";
+      },
+    },
+  ),
+);
 
 app.get("/", (request, response) => {
   response.send("<h1>Phonebook Backend!</h1>");
@@ -61,6 +86,12 @@ app.delete("/api/persons/:id", (request, response) => {
   response.status(204).end();
 });
 
+app.get("/info", (request, response) => {
+  const len = persons.length;
+  const date = new Date();
+  response.send(`<p>Phonebook has info for ${len} people</p><p>${date}</p>`);
+});
+
 app.post("/api/persons", (request, response) => {
   const body = request.body;
 
@@ -83,13 +114,7 @@ app.post("/api/persons", (request, response) => {
   response.json(person);
 });
 
-app.get("/info", (request, response) => {
-  const len = persons.length;
-  const date = new Date();
-  response.send(`<p>Phonebook has info for ${len} people</p><p>${date}</p>`);
-});
-
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
