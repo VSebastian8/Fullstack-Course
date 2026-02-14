@@ -16,6 +16,7 @@ const PhoneForm = ({ persons, setPersons, newNotification }) => {
     event.preventDefault();
     if (newName === "" || newNumber === "") return;
     let existingPerson = persons.find((p) => p.name === newName);
+
     if (existingPerson === undefined) {
       personService
         .addPerson({ name: newName, number: newNumber })
@@ -24,6 +25,9 @@ const PhoneForm = ({ persons, setPersons, newNotification }) => {
           setNewName("");
           setNewNumber("");
           newNotification(`Added ${person.name}.`, false);
+        })
+        .catch((error) => {
+          newNotification(error, true);
         });
     } else {
       if (
@@ -41,12 +45,11 @@ const PhoneForm = ({ persons, setPersons, newNotification }) => {
             setNewNumber("");
             newNotification(`Modified number for ${person.name}.`, false);
           })
-          .catch((_error) => {
-            newNotification(
-              `Person ${existingPerson.name}  has already deleted from the server.`,
-              true,
-            );
-            setPersons(persons.filter((p) => p.id !== existingPerson.id));
+          .catch((error) => {
+            if (error.status == 404) {
+              newNotification("Missing person from phonebook", true);
+              setPersons(persons.filter((p) => p.name !== newName));
+            } else newNotification(error.response.data.error, true);
           });
       }
     }

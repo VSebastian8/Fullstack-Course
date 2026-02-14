@@ -15,11 +15,8 @@ const Persons = ({ persons, setPersons, searchString, newNotification }) => {
             false,
           );
         })
-        .catch((_error) => {
-          newNotification(
-            `Person ${person.name} has already deleted from the server.`,
-            true,
-          );
+        .catch((error) => {
+          newNotification(error, true);
           setPersons(persons.filter((p) => p.id !== person.id));
         });
   };
