@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+content-type: application/json
+
+{
+  "title": "How to become the best spy that ever was",
+  "author": "James Bond",
+  "url": "www.some/url.com",
+  "likes": "7"
+}
