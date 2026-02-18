@@ -1,4 +1,6 @@
-const exampleBlogs = [
+const Blog = require('../models/blog')
+
+const listWithManyBlogs = [
   {
     _id: '5a422a851b54a676234d17f7',
     title: 'React patterns',
@@ -60,4 +62,20 @@ const listWithOneBlog = [
   }
 ]
 
-module.exports = { exampleBlogs, listWithOneBlog }
+const initialBlogs = listWithManyBlogs.map(blog => new Blog(blog))
+
+
+const nonExistingId = async () => {
+  const blog = new Blog({ title: 'willremovethissoon', author: 'nooneatall' })
+  await blog.save()
+  await blog.deleteOne()
+
+  return blog._id.toString()
+}
+
+const blogsInDb = async () => {
+  const blogs = await Blog.find({})
+  return blogs.map(note => note.toJSON())
+}
+
+module.exports = { initialBlogs, nonExistingId,  blogsInDb, listWithManyBlogs, listWithOneBlog }
