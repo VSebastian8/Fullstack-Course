@@ -20,9 +20,7 @@ describe('users api with initial user', () => {
     await user.save()
   })
 
-  describe('creating users', () => {
-
-
+  describe.only('creating users', () => {
     test('creation succeeds with a fresh username', async () => {
       const usersAtStart = await helper.usersInDb()
 
