@@ -34,7 +34,7 @@ blogsRouter.delete('/:id', async (request, response) => {
     return response.status(204).end()
   }
   if ( blog.user.toString() !== user._id.toString() ) {
-    return response.status(401).json({ error: 'user invalid' })
+    return response.status(401).json({ error: 'user invalid, cannot delete the blogs of another user' })
   }
 
   await Blog.findByIdAndDelete(id)
@@ -53,10 +53,6 @@ blogsRouter.put('/:id', async (request, response) => {
   const blog = await Blog.findById(id)
   if (!blog) {
     return response.status(404).end()
-  }
-  const user = request.user
-  if ( blog.user.toString() !== user._id.toString() ) {
-    return response.status(401).json({ error: 'user invalid' })
   }
 
   // Update blog likes

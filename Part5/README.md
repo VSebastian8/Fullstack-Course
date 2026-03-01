@@ -1,2 +1,3 @@
 - [ ] Blog App
-  - [ ] Login Frontend
+  - [x] Login Frontend
+  - [x] Create, Like & Delete Blogs

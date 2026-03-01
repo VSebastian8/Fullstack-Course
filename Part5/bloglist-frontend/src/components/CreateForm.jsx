@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const CreateForm = ({ blogs, setBlogs, newNotification }) => {
+const CreateForm = ({ blogs, setBlogs, newNotification, blogFormRef }) => {
   const[title, setTitle] = useState('')
   const[author, setAuthor] = useState('')
   const[url, setUrl] = useState('')
@@ -17,13 +17,14 @@ const CreateForm = ({ blogs, setBlogs, newNotification }) => {
       setAuthor('')
       setUrl('')
       newNotification('blog created successfully', false)
+      blogFormRef.current.toggleVisibility()
     } catch(e) {
       newNotification(e.response.data.error, true)
     }
   }
 
   return <div>
-    <h2>create new</h2>
+    <h2>create new blog</h2>
     <form onSubmit={ handleCreate }>
       <div>
         <label>
