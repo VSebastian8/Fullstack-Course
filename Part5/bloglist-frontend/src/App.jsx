@@ -42,6 +42,18 @@ const App = () => {
     newNotification('logged out successfully', false)
   }
 
+  const createBlog = async (newBlog) => {
+    try {
+      const blog = await blogService.create(newBlog)
+      setBlogs(blogs.concat(blog))
+      newNotification('blog created successfully', false)
+      return true
+    } catch(e) {
+      newNotification(e.response.data.error, true)
+      return false
+    }
+  }
+
   if (user === null) {
     return <div>
       <Notification message={notification} isError={isError} />
@@ -56,7 +68,7 @@ const App = () => {
         <p>{user.username} logged in</p>
         <button onClick={handleLogout}>logout</button>
         <Togglable ref={blogFormRef} buttonLabel="create blog">
-          <CreateForm blogs={blogs} setBlogs={setBlogs} newNotification={newNotification} blogFormRef={blogFormRef}/>
+          <CreateForm createBlog={createBlog} blogFormRef={blogFormRef}/>
         </Togglable>
         <p/>
         <Blogs blogs={blogs} setBlogs={setBlogs} newNotification={newNotification}/>

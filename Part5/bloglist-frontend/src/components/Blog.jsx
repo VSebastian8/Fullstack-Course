@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
 
-const Blog = ({ blog, updateBlog, deleteBlog, newNotification }) => {
+const Blog = ({ blog, updateBlog, deleteBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -16,20 +15,12 @@ const Blog = ({ blog, updateBlog, deleteBlog, newNotification }) => {
   }
 
   const handleLike = () => {
-    blogService.update(blog.id, { likes: blog.likes + 1 }) // backend only updates likes
     updateBlog({ ...blog, likes: blog.likes + 1 })
   }
 
   const handleRemove = async () => {
-    try {
-      if(window.confirm(`Remove blog ${blog.title}`)){
-        await blogService.deleteBlog(blog.id)
-        deleteBlog(blog.id)
-        newNotification('deleted blog successfully', false)
-      }
-    }
-    catch (e) {
-      newNotification(e.response.data.error, true)
+    if(window.confirm(`Remove blog ${blog.title}`)){
+      await deleteBlog(blog.id)
     }
   }
 
@@ -42,7 +33,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, newNotification }) => {
         likes {blog.likes} <button onClick={handleLike}>like</button>
       </div>
       <div>
-        {blog.author}
+        {blog.user.name}
       </div>
       <button onClick={handleRemove}>remove</button>
     </>
@@ -51,7 +42,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, newNotification }) => {
   return(
     <div style={blogStyle}>
       <div>
-        {blog.title}
+        {blog.title} - {blog.author}
         <button onClick={toggleVisibility}>{visible ? 'hide' : 'view'}</button>
         {visible && fullBlog()}
       </div>

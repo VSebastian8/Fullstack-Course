@@ -1,3 +1,4 @@
 - [ ] Blog App
   - [x] Login Frontend
   - [x] Create, Like & Delete Blogs
+  - [x] Component Testing
