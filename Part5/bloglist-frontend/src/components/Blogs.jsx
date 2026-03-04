@@ -1,7 +1,7 @@
 import Blog from './Blog'
 import blogService from '../services/blogs'
 
-const Blogs = ({ blogs, setBlogs, newNotification }) => {
+const Blogs = ({ blogs, setBlogs, newNotification, user }) => {
   const updateBlog = async (updatedBlog) => {
     await blogService.update(updatedBlog.id, { likes: updatedBlog.likes }) // backend only updates likes
     setBlogs(blogs.map(
@@ -24,7 +24,7 @@ const Blogs = ({ blogs, setBlogs, newNotification }) => {
 
   return <div>
     {blogs.sort((b1, b2) => b1.likes < b2.likes).map(blog =>
-      <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} />
+      <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} user={user} />
     )}
   </div>
 }

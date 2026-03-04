@@ -71,7 +71,7 @@ const App = () => {
           <CreateForm createBlog={createBlog} blogFormRef={blogFormRef}/>
         </Togglable>
         <p/>
-        <Blogs blogs={blogs} setBlogs={setBlogs} newNotification={newNotification}/>
+        <Blogs user={user} blogs={blogs} setBlogs={setBlogs} newNotification={newNotification}/>
       </div>
     )}
 }
