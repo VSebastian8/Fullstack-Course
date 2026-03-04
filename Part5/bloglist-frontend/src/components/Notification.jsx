@@ -11,7 +11,7 @@ const Notification = ({ message, isError }) => {
     padding: '10px',
     marginBottom: '10px',
   }
-  return <div style={style}> {message} </div>
+  return <div style={style} className="notification"> {message} </div>
 }
 
 export default Notification
