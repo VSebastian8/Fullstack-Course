@@ -23,7 +23,7 @@ const Blogs = ({ blogs, setBlogs, newNotification, user }) => {
   }
 
   return <div>
-    {blogs.sort((b1, b2) => b1.likes < b2.likes).map(blog =>
+    {blogs.sort((b1, b2) => b2.likes - b1.likes).map(blog =>
       <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} user={user} />
     )}
   </div>

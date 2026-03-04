@@ -88,6 +88,61 @@ describe('Blog app', () => {
         await likeBlog(spyBlog)
         await expect(spyBlog.getByText('likes 3')).toBeVisible()
       })
+
+      test('a blog can be deleted', async ({ page }) => {
+        page.on('dialog', dialog => dialog.accept())
+        const blog = page.getByText('Hmmm hmm hmmm').locator('..')
+        // Expand blog to see remove button
+        await blog.getByRole('button', { name: 'view' }).click()
+        await blog.getByText('hide').waitFor()
+        // Delete blog
+        await blog.getByRole('button', { name: 'remove' }).click()
+        await expect(page.getByText('Hmmm hmm hmmm')).toBeHidden()
+        expect(page.getByText('Hmmm hmm hmmm')).not.toBeVisible()
+      })
+
+      test('only owner can see remove button', async ({ page }) => {
+        // Should see button for own blogs
+        const detectiveBlog = page.getByText('Hues and clues').locator('..')
+        await detectiveBlog.getByRole('button', { name: 'view' }).click()
+        await detectiveBlog.getByText('hide').waitFor()
+        await expect(detectiveBlog.getByText('remove')).toBeVisible()
+        // Shouldn't see button for other blogs
+        const spyBlog = page.getByText('best spy first blog').locator('..')
+        await spyBlog.getByRole('button', { name: 'view' }).click()
+        await spyBlog.getByText('hide').waitFor()
+        await expect(spyBlog.getByText('remove')).not.toBeVisible()
+      })
+
+      test('blogs are sorted by the number of likes', async ({ page }) => {
+        // Select the 3 blogs
+        const detectiveBlog1 = page.getByText('Hmmm hmm hmmm').locator('..')
+        const detectiveBlog2 = page.getByText('Hues and clues').locator('..')
+        const spyBlog = page.getByText('best spy first blog').locator('..')
+        // Like each blog a few times
+        await likeBlog(spyBlog)
+        await likeBlog(detectiveBlog1)
+        await likeBlog(detectiveBlog2)
+        await likeBlog(detectiveBlog1)
+        await likeBlog(spyBlog)
+        await likeBlog(spyBlog)
+        await likeBlog(detectiveBlog2)
+        await likeBlog(spyBlog)
+        await likeBlog(detectiveBlog2)
+        await likeBlog(spyBlog)
+        await likeBlog(detectiveBlog2)
+        await likeBlog(detectiveBlog2)
+        await likeBlog(detectiveBlog2)
+        // Check final like count
+        await expect(spyBlog.getByText('likes 5')).toBeVisible()
+        await expect(detectiveBlog1.getByText('likes 2')).toBeVisible()
+        await expect(detectiveBlog2.getByText('likes 6')).toBeVisible()
+        // Check correct order
+        const blogs = await page.locator('.blog').all()
+        await expect(blogs[0].getByText('Hues and Clue')).toBeVisible()
+        await expect(blogs[1].getByText('best spy first blog')).toBeVisible()
+        await expect(blogs[2].getByText('Hmmm hmm hmmm')).toBeVisible()
+      })
     })
   })
 })
