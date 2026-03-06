@@ -11,5 +11,5 @@ Progress:
 - [x] [Part 3](./Part3/)
 - [x] [Part 4](./Part4/)
 - [x] [Part 5](./Part5/)
-- [ ] [Part 6](./Part6/)
+- [x] [Part 6](./Part6/)
 - [ ] [Part 7](./Part7/)

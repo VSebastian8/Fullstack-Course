@@ -27,7 +27,7 @@ const App = () => {
       <AnecdoteForm />
 
       {anecdotes.toSorted((a1, a2) => a2.votes - a1.votes).map((anecdote) => (
-        <Anecdote anecdote={anecdote}/>
+        <Anecdote anecdote={anecdote} key={anecdote.id}/>
       ))}
     </div>
   )

@@ -20,7 +20,8 @@ const createNew = async (content) => {
   const response = await fetch(baseUrl, options)
 
   if (!response.ok) {
-    throw new Error('Failed to create anecdote')
+    const message = JSON.parse(await response.text())
+    throw new Error(message.error)
   }
 
   return await response.json()
