@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Blog from "./Blog";
+import { Provider } from "react-redux";
+import store from "../store";
 
 describe("<Blog />", () => {
   test("renders only title and author by default", () => {
@@ -17,7 +19,11 @@ describe("<Blog />", () => {
       },
     };
 
-    render(<Blog blog={blog} />);
+    render(
+      <Provider store={store}>
+        <Blog blog={blog} />{" "}
+      </Provider>,
+    );
     // Displays Title and Author
     screen.getByText("Go To Statement Considered Harmful - Edsger W. Dijkstra");
     // Doesn't display likes
@@ -45,7 +51,11 @@ describe("<Blog />", () => {
       },
     };
 
-    render(<Blog blog={blog} />);
+    render(
+      <Provider store={store}>
+        <Blog blog={blog} />
+      </Provider>,
+    );
 
     const user = userEvent.setup();
     const viewButton = screen.getByText("view");
@@ -58,34 +68,5 @@ describe("<Blog />", () => {
       "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
       { exact: false },
     );
-  });
-
-  test("liking blog calls update props function", async () => {
-    const blog = {
-      id: "69a457be851ef6488b1c5dd9",
-      likes: 18,
-      title: "Go To Statement Considered Harmful",
-      author: "Edsger W. Dijkstra",
-      url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-      user: {
-        username: "dijstrack",
-        name: "Edsger W. Dijkstra",
-        id: "699ec6fad81ee539baa1419f",
-      },
-    };
-    const mockUpdateBlog = vi.fn();
-
-    render(<Blog blog={blog} updateBlog={mockUpdateBlog} />);
-
-    const user = userEvent.setup();
-    const viewButton = screen.getByText("view");
-    await user.click(viewButton);
-
-    const likeButton = screen.getByText("like");
-    await user.click(likeButton);
-    await user.click(likeButton);
-
-    // 2 likes => 2 update calls
-    expect(mockUpdateBlog.mock.calls).toHaveLength(2);
   });
 });
