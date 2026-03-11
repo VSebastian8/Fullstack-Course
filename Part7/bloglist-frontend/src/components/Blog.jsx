@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { likeBlog, removeBlog } from "../reducers/blogReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
-const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
+const Blog = ({ blog, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -9,18 +12,24 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
     marginBottom: 5,
   };
   const [visible, setVisible] = useState(false);
+  const dispatch = useDispatch();
 
   const toggleVisibility = () => {
     setVisible(!visible);
   };
 
   const handleLike = () => {
-    updateBlog({ ...blog, likes: blog.likes + 1 });
+    dispatch(likeBlog(blog));
   };
 
   const handleRemove = async () => {
     if (window.confirm(`Remove blog ${blog.title}`)) {
-      await deleteBlog(blog.id);
+      try {
+        dispatch(removeBlog(blog));
+        dispatch(setNotification("deleted blog successfully", false));
+      } catch (e) {
+        dispatch(setNotification(e.response.data.error, true));
+      }
     }
   };
 

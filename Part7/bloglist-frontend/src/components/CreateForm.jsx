@@ -1,18 +1,26 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { appendBlog } from "../reducers/blogReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
-const CreateForm = ({ createBlog, blogFormRef }) => {
+const CreateForm = ({ blogFormRef }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+  const dispatch = useDispatch();
 
   const handleCreate = async (event) => {
     event.preventDefault();
-    if (await createBlog({ title, author, url })) {
+    try {
+      await dispatch(appendBlog({ title, author, url }));
       // Blog creation succeded
+      dispatch(setNotification("blog created successfully", false));
       setTitle("");
       setAuthor("");
       setUrl("");
       blogFormRef.current.toggleVisibility();
+    } catch (e) {
+      dispatch(setNotification(e.response.data.error, true));
     }
   };
 

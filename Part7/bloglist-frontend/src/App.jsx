@@ -5,17 +5,17 @@ import LoginForm from "./components/LoginForm";
 import CreateForm from "./components/CreateForm";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
-import blogService from "./services/blogs";
 import { setNotification } from "./reducers/notificationReducer";
+import { initializeBlogs } from "./reducers/blogReducer";
+import blogService from "./services/blogs";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const blogFormRef = useRef();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    dispatch(initializeBlogs());
   }, []);
 
   useEffect(() => {
@@ -33,18 +33,6 @@ const App = () => {
     dispatch(setNotification("logged out successfully", false));
   };
 
-  const createBlog = async (newBlog) => {
-    try {
-      const blog = await blogService.create(newBlog);
-      setBlogs(blogs.concat(blog));
-      dispatch(setNotification("blog created successfully", false));
-      return true;
-    } catch (e) {
-      dispatch(setNotification(e.response.data.error, true));
-      return false;
-    }
-  };
-
   if (user === null) {
     return (
       <div>
@@ -60,10 +48,10 @@ const App = () => {
         <p>{user.name} logged in</p>
         <button onClick={handleLogout}>logout</button>
         <Togglable ref={blogFormRef} buttonLabel="create blog">
-          <CreateForm createBlog={createBlog} blogFormRef={blogFormRef} />
+          <CreateForm blogFormRef={blogFormRef} />
         </Togglable>
         <p />
-        <Blogs user={user} blogs={blogs} setBlogs={setBlogs} />
+        <Blogs user={user} />
       </div>
     );
   }

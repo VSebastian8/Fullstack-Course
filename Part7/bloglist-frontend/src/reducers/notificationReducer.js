@@ -8,7 +8,7 @@ const notificationSlice = createSlice({
       return action.payload;
     },
     clear(state, action) {
-      if (action.payload === state.message) return null;
+      if (state && action.payload === state.message) return null;
       return state;
     },
   },
