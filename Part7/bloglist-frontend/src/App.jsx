@@ -1,17 +1,18 @@
 import { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import Blogs from "./components/Blogs";
 import LoginForm from "./components/LoginForm";
 import CreateForm from "./components/CreateForm";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 import blogService from "./services/blogs";
+import { setNotification } from "./reducers/notificationReducer";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [notification, setNotification] = useState(null);
-  const [isError, setIsError] = useState(false);
   const blogFormRef = useRef();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -26,28 +27,20 @@ const App = () => {
     }
   }, []);
 
-  const newNotification = (message, err) => {
-    setNotification(message);
-    setIsError(err);
-    setTimeout(() => {
-      setNotification(null);
-    }, 3000);
-  };
-
   const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem("loggedBloglistUser");
-    newNotification("logged out successfully", false);
+    dispatch(setNotification("logged out successfully", false));
   };
 
   const createBlog = async (newBlog) => {
     try {
       const blog = await blogService.create(newBlog);
       setBlogs(blogs.concat(blog));
-      newNotification("blog created successfully", false);
+      dispatch(setNotification("blog created successfully", false));
       return true;
     } catch (e) {
-      newNotification(e.response.data.error, true);
+      dispatch(setNotification(e.response.data.error, true));
       return false;
     }
   };
@@ -55,27 +48,22 @@ const App = () => {
   if (user === null) {
     return (
       <div>
-        <Notification message={notification} isError={isError} />
-        <LoginForm setUser={setUser} newNotification={newNotification} />
+        <Notification />
+        <LoginForm setUser={setUser} />
       </div>
     );
   } else {
     return (
       <div>
         <h2>Blogs</h2>
-        <Notification message={notification} isError={isError} />
+        <Notification />
         <p>{user.name} logged in</p>
         <button onClick={handleLogout}>logout</button>
         <Togglable ref={blogFormRef} buttonLabel="create blog">
           <CreateForm createBlog={createBlog} blogFormRef={blogFormRef} />
         </Togglable>
         <p />
-        <Blogs
-          user={user}
-          blogs={blogs}
-          setBlogs={setBlogs}
-          newNotification={newNotification}
-        />
+        <Blogs user={user} blogs={blogs} setBlogs={setBlogs} />
       </div>
     );
   }

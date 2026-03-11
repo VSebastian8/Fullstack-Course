@@ -1,7 +1,11 @@
 import Blog from "./Blog";
 import blogService from "../services/blogs";
+import { setNotification } from "../reducers/notificationReducer";
+import { useDispatch } from "react-redux";
 
-const Blogs = ({ blogs, setBlogs, newNotification, user }) => {
+const Blogs = ({ blogs, setBlogs, user }) => {
+  const dispatch = useDispatch();
+
   const updateBlog = async (updatedBlog) => {
     await blogService.update(updatedBlog.id, { likes: updatedBlog.likes }); // backend only updates likes
     setBlogs(
@@ -13,9 +17,9 @@ const Blogs = ({ blogs, setBlogs, newNotification, user }) => {
     try {
       await blogService.deleteBlog(deletedBlogId);
       setBlogs(blogs.filter((blog) => blog.id !== deletedBlogId));
-      newNotification("deleted blog successfully", false);
+      dispatch(setNotification("deleted blog successfully", false));
     } catch (e) {
-      newNotification(e.response.data.error, true);
+      dispatch(setNotification(e.response.data.error, true));
     }
   };
 

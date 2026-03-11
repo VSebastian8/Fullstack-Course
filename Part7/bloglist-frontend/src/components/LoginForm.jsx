@@ -1,10 +1,13 @@
 import { useState } from "react";
 import loginService from "../services/login";
 import blogService from "../services/blogs";
+import { setNotification } from "../reducers/notificationReducer";
+import { useDispatch } from "react-redux";
 
-const LoginForm = ({ setUser, newNotification }) => {
+const LoginForm = ({ setUser }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -17,9 +20,9 @@ const LoginForm = ({ setUser, newNotification }) => {
       setUser(user);
       setUsername("");
       setPassword("");
-      newNotification("logged in successfully", false);
+      dispatch(setNotification("logged in successfully", false));
     } catch {
-      newNotification("wrong username or password", true);
+      dispatch(setNotification("wrong username or password", true));
     }
   };
 
