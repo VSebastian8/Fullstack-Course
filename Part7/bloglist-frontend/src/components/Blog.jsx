@@ -1,12 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
-import { likeBlog, removeBlog } from "../reducers/blogReducer";
+import { likeBlog, removeBlog, commentBlog } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
 import { useNavigate } from "react-router-dom";
+import { useField } from "../hooks";
+import Field from "./Field";
 
 const Blog = ({ blog }) => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const comment = useField("text", "comment");
 
   const handleLike = () => {
     dispatch(likeBlog(blog));
@@ -24,8 +27,13 @@ const Blog = ({ blog }) => {
     }
   };
 
-  if (!blog) return <p>loading blog...</p>;
+  const handleComment = (e) => {
+    e.preventDefault();
+    dispatch(commentBlog(blog, comment.value));
+    comment.reset();
+  };
 
+  if (!blog) return <p>loading blog...</p>;
   return (
     <div className="blog">
       <h2>
@@ -41,6 +49,16 @@ const Blog = ({ blog }) => {
       ) : (
         <></>
       )}
+      <h3>comments</h3>
+      <form onSubmit={handleComment}>
+        <Field field={comment} />
+        <button type="submit">add comment</button>
+      </form>
+      <ul>
+        {blog.comments.map((comment) => (
+          <li key={"comment-" + blog.id + comment}>{comment}</li>
+        ))}
+      </ul>
     </div>
   );
 };
