@@ -1,13 +1,15 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { setNotification } from "./reducers/notificationReducer";
+import { initializeBlogs } from "./reducers/blogReducer";
+import { refreshUsers } from "./reducers/usersReducer";
+import { checkUser, logoutUser } from "./reducers/userReducer";
 import Blogs from "./components/Blogs";
+import Users from "./components/Users";
 import LoginForm from "./components/LoginForm";
 import CreateForm from "./components/CreateForm";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
-import { setNotification } from "./reducers/notificationReducer";
-import { initializeBlogs } from "./reducers/blogReducer";
-import { checkUser, logoutUser } from "./reducers/userReducer";
 
 const App = () => {
   const blogFormRef = useRef();
@@ -16,6 +18,10 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs());
+  }, []);
+
+  useEffect(() => {
+    dispatch(refreshUsers());
   }, []);
 
   useEffect(() => {
@@ -45,7 +51,8 @@ const App = () => {
           <CreateForm blogFormRef={blogFormRef} />
         </Togglable>
         <p />
-        <Blogs user={user} />
+        <Blogs />
+        <Users />
       </div>
     );
   }
