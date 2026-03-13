@@ -1,23 +1,12 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { likeBlog, removeBlog } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
+import { useNavigate } from "react-router-dom";
 
 const Blog = ({ blog }) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: "solid",
-    borderWidth: 1,
-    marginBottom: 5,
-  };
-  const [visible, setVisible] = useState(false);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
-  const toggleVisibility = () => {
-    setVisible(!visible);
-  };
+  const navigate = useNavigate();
 
   const handleLike = () => {
     dispatch(likeBlog(blog));
@@ -28,14 +17,20 @@ const Blog = ({ blog }) => {
       try {
         dispatch(removeBlog(blog));
         dispatch(setNotification("deleted blog successfully", false));
+        navigate("/");
       } catch (e) {
         dispatch(setNotification(e.response.data.error, true));
       }
     }
   };
 
-  const fullBlog = () => (
-    <>
+  if (!blog) return <p>loading blog...</p>;
+
+  return (
+    <div className="blog">
+      <h2>
+        {blog.title} - {blog.author}
+      </h2>
       <div>{blog.url}</div>
       <div>
         likes {blog.likes} <button onClick={handleLike}>like</button>
@@ -46,16 +41,6 @@ const Blog = ({ blog }) => {
       ) : (
         <></>
       )}
-    </>
-  );
-
-  return (
-    <div style={blogStyle} className="blog">
-      <div>
-        {blog.title} - {blog.author}
-        <button onClick={toggleVisibility}>{visible ? "hide" : "view"}</button>
-        {visible && fullBlog()}
-      </div>
     </div>
   );
 };
