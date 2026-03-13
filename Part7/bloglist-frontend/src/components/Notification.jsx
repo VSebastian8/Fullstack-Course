@@ -1,4 +1,16 @@
 import { useSelector } from "react-redux";
+import styled from "styled-components";
+
+const NotifDiv = styled.div`
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  color: ${(props) => (props.$isError ? "red" : "green")};
+`;
 
 const Notification = () => {
   const notification = useSelector((state) => state.notification);
@@ -7,20 +19,7 @@ const Notification = () => {
   }
   const { message, isError } = notification;
 
-  const style = {
-    color: isError ? "red" : "green",
-    background: "lightgrey",
-    fontSize: "20px",
-    borderStyle: "solid",
-    borderRadius: "5px",
-    padding: "10px",
-    marginBottom: "10px",
-  };
-  return (
-    <div style={style} className="notification">
-      {message}
-    </div>
-  );
+  return <NotifDiv $isError={isError}>{message}</NotifDiv>;
 };
 
 export default Notification;

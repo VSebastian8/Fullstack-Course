@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Routes, Route, Link, useMatch, useNavigate } from "react-router-dom";
+import { Routes, Route, useMatch } from "react-router-dom";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { refreshUsers } from "./reducers/usersReducer";
 import { checkUser } from "./reducers/userReducer";
@@ -13,6 +13,15 @@ import Togglable from "./components/Togglable";
 import Menu from "./components/Menu";
 import User from "./components/User";
 import Blog from "./components/Blog";
+import styled from "styled-components";
+
+const Title = styled.h2`
+  display: inline-block;
+  background: linear-gradient(135deg, cornflowerblue, mediumpurple);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+`;
 
 const App = () => {
   const blogFormRef = useRef();
@@ -54,7 +63,7 @@ const App = () => {
       <div>
         <Menu />
         <Notification />
-        <h2>Blog App</h2>
+        <Title>Blog App</Title>
         <Routes>
           <Route path="/users/:id" element={<User user={viewedUser} />} />
           <Route path="/users" element={<Users />} />

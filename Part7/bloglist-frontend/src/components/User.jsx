@@ -1,14 +1,43 @@
+import styled from "styled-components";
+
+const UserName = styled.h2`
+  background-color: cornflowerblue;
+  color: white;
+  text-align: center;
+`;
+
+const List = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 2px solid cornflowerblue;
+`;
+
+const ListItem = styled.li`
+  padding: 10px;
+  border-bottom: 1px solid lightblue;
+  color: darkblue;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: #f0f5ff;
+  }
+`;
+
 const User = ({ user }) => {
   if (!user) return <p>loading user...</p>;
   return (
     <>
-      <h2>{user.name}</h2>
+      <UserName>{user.name}</UserName>
       <h3>added blogs</h3>
-      <ul>
+      <List>
         {user.blogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
+          <ListItem key={blog.id}>{blog.title}</ListItem>
         ))}
-      </ul>
+      </List>
     </>
   );
 };

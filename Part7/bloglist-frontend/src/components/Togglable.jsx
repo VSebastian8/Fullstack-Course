@@ -1,4 +1,14 @@
 import { useState, useImperativeHandle } from "react";
+import styled from "styled-components";
+
+const ToggleButton = styled.button`
+  background-color: lightblue;
+  cursor: pointer;
+  color: darkblue;
+  border-radius: 10%;
+  border-width: 2px;
+  padding: 5px;
+`;
 
 const Togglable = (props) => {
   const [visible, setVisible] = useState(false);
@@ -17,11 +27,13 @@ const Togglable = (props) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+        <ToggleButton onClick={toggleVisibility}>
+          {props.buttonLabel}
+        </ToggleButton>
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={toggleVisibility}>cancel</button>
+        <ToggleButton onClick={toggleVisibility}>cancel</ToggleButton>
       </div>
     </div>
   );
