@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const NotifDiv = styled.div`
-  background: lightgrey;
+  background: azure;
   font-size: 20px;
   border-style: solid;
   border-radius: 5px;

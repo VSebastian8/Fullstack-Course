@@ -3,6 +3,7 @@ import { setNotification } from "../reducers/notificationReducer";
 import { logoutUser } from "../reducers/userReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import NiceButton from "./NiceButton";
 
 const MenuDiv = styled.div`
   display: flex;
@@ -25,18 +26,6 @@ const MenuItem = styled.div`
   }
 `;
 
-const LogoutButton = styled.button`
-  cursor: pointer;
-  color: white;
-  background: cornflowerblue;
-  border-radius: 3px;
-  border: 2px solid cornflowerblue;
-  padding: 0.25em 1em;
-  &:hover {
-    filter: brightness(0.85);
-  }
-`;
-
 const Menu = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -45,7 +34,7 @@ const Menu = () => {
     dispatch(logoutUser());
     dispatch(setNotification("logged out successfully", false));
   };
-
+  if (!user) return <></>;
   return (
     <MenuDiv>
       <MenuItem>
@@ -58,7 +47,7 @@ const Menu = () => {
       </MenuItem>
       <MenuItem>{user.name}</MenuItem>
       <MenuItem>
-        <LogoutButton onClick={handleLogout}>logout</LogoutButton>
+        <NiceButton onClick={handleLogout}>logout</NiceButton>
       </MenuItem>
     </MenuDiv>
   );

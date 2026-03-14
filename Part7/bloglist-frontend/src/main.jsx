@@ -6,6 +6,9 @@ import store from "./store";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
+  a {
+    color: inherit
+  }
   a:visited {
     color: inherit;
     display: block;

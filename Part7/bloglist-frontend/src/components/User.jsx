@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const UserName = styled.h2`
@@ -35,7 +36,9 @@ const User = ({ user }) => {
       <h3>added blogs</h3>
       <List>
         {user.blogs.map((blog) => (
-          <ListItem key={blog.id}>{blog.title}</ListItem>
+          <ListItem key={blog.id}>
+            <Link to={`../blogs/${blog.id}`}>{blog.title}</Link>
+          </ListItem>
         ))}
       </List>
     </>
