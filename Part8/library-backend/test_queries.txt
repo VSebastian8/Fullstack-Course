@@ -1,0 +1,33 @@
+mutation ChangeYear {
+  editAuthor(name: "Reijo Mäki", setBornTo: 1958) {
+    name
+    born
+  }
+}
+
+mutation BookByNewAuthor {
+  addBook(
+    title: "Pimeyden tango",
+    author: "Reijo Mäki",
+    published: 1997,
+    genres: ["crime"]
+  ) {
+    title,
+    author
+  }
+}
+
+query AllAuthors {
+  allAuthors {
+    name
+    born
+    bookCount
+  }
+}
+
+query RefactoringBooksByRobert{
+  allBooks(author: "Robert Martin", genre: "refactoring") {
+    title
+    author
+  }
+}
