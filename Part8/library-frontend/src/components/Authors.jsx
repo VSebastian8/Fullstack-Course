@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client/react";
 import { ALL_AUTHORS } from "../queries";
+import YearForm from "./EditYear";
 
 const Authors = ({ show }) => {
   const result = useQuery(ALL_AUTHORS);
@@ -12,7 +13,6 @@ const Authors = ({ show }) => {
   }
 
   const authors = result.data.allAuthors;
-  console.log(authors);
 
   return (
     <div>
@@ -33,6 +33,7 @@ const Authors = ({ show }) => {
           ))}
         </tbody>
       </table>
+      <YearForm authors={authors} />
     </div>
   );
 };
