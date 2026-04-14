@@ -1,7 +1,7 @@
 const typeDefs = /* GraphQL */ `
   type Book {
     title: String!
-    author: String!
+    author: Author!
     published: Int!
     genres: [String!]!
     id: ID!
@@ -10,6 +10,7 @@ const typeDefs = /* GraphQL */ `
     name: String!
     born: Int
     bookCount: Int!
+    books: [Book!]!
     id: ID!
   }
   type Query {

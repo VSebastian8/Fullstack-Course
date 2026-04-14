@@ -12,8 +12,29 @@ mutation BookByNewAuthor {
     published: 1997,
     genres: ["crime"]
   ) {
-    title,
-    author
+    title
+  }
+}
+
+mutation ShortBookTitleValidation {
+  addBook(
+    title: "Oo",
+    author: "Reijo Mäki",
+    published: 1997,
+    genres: ["crime"]
+  ) {
+    title
+  }
+}
+
+mutation ShortAuthorNameValidation {
+  addBook(
+    title: "One time only",
+    author: "Re",
+    published: 1997,
+    genres: ["crime"]
+  ) {
+    title
   }
 }
 
@@ -22,12 +43,28 @@ query AllAuthors {
     name
     born
     bookCount
+    books {
+      title
+    }
+  }
+}
+
+query AllBooks {
+  allBooks {
+    title
+    author {
+      name
+      bookCount
+    }
   }
 }
 
 query RefactoringBooksByRobert{
   allBooks(author: "Robert Martin", genre: "refactoring") {
     title
-    author
+    author {
+      name
+      born
+    }
   }
 }
