@@ -1,4 +1,5 @@
-GraphQL
+GraphQL Library
 
-- [x] Library Backend (8.1-8.7)
-- [ ] Library Frontend (8.8-8.12)
+- [x] Backend (8.1-8.7)
+- [x] Frontend (8.8-8.12)
+- [x] Database (8.13-8.16)

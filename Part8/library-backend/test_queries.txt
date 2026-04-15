@@ -1,5 +1,5 @@
 mutation ChangeYear {
-  editAuthor(name: "Reijo Mäki", setBornTo: 1958) {
+  editAuthor(name: "Reijo Mäki", setBornTo: 1888) {
     name
     born
   }
@@ -66,5 +66,31 @@ query RefactoringBooksByRobert{
       name
       born
     }
+  }
+}
+
+mutation newUser {
+  createUser (
+    username: "jamesbond"
+    favoriteGenre: "action"
+  ) {
+    username
+    id
+  }
+}
+
+mutation loginUser {
+  login (
+    username: "jamesbond"
+    password: "secret"
+  ) {
+    value
+  }
+}
+ 
+query currentUser {
+  me {
+    username
+    favoriteGenre
   }
 }
