@@ -23,11 +23,13 @@ const resolvers = {
     me: (root, args, context) => context.currentUser,
   },
   Author: {
-    bookCount: async (root) => {
-      return (await Book.find({ author: root })).length;
-    },
+    bookCount: async (root) => root.books.length,
+    // {
+    //   return (await Book.find({ author: root })).length;
+    // },
     books: async (root) => {
-      return Book.find({ author: root });
+      await root.populate("books");
+      return root.books;
     },
   },
   Book: {
@@ -49,6 +51,7 @@ const resolvers = {
       let author = await Author.findOne({ name: args.author });
       if (!author) {
         author = new Author({ name: args.author });
+        console.log(author);
         try {
           await author.save();
         } catch (error) {
@@ -65,6 +68,8 @@ const resolvers = {
       const book = new Book({ ...args, author: author });
       try {
         await book.save();
+        author.books = author.books.concat(book);
+        await author.save();
       } catch (error) {
         throw new GraphQLError(`Saving book failed: ${error.message}`, {
           extensions: {
