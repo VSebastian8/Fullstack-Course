@@ -7,7 +7,6 @@ const Books = ({ show }) => {
   const genresQuery = useQuery(ALL_GENRES);
   const booksQuery = useQuery(ALL_BOOKS, {
     variables: { genre: selectedGenre },
-    fetchPolicy: "no-cache",
   });
 
   if (!show) {
