@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client/react";
-import { LOGIN } from "../queries";
+import { LOGIN, USER_GENRE } from "../queries";
 
-const LoginForm = ({ setToken, show, setPage }) => {
+const LoginForm = ({ setToken, show, setPage, refetchUser }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -12,6 +12,7 @@ const LoginForm = ({ setToken, show, setPage }) => {
       setToken(token);
       setPage("authors");
       localStorage.setItem("library-user-token", token);
+      refetchUser();
     },
   });
 
