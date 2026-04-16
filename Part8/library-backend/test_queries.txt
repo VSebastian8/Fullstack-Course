@@ -71,8 +71,8 @@ query RefactoringBooksByRobert{
 
 mutation newUser {
   createUser (
-    username: "jamesbond"
-    favoriteGenre: "action"
+    username: "root"
+    favoriteGenre: "refactoring"
   ) {
     username
     id
@@ -92,5 +92,15 @@ query currentUser {
   me {
     username
     favoriteGenre
+  }
+}
+
+subscription BookAdded {
+  bookAdded {
+    title
+    author {
+      name
+    }
+    genres
   }
 }
