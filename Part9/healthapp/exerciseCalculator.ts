@@ -2,8 +2,7 @@ interface CmdArgs {
   target: number;
   exerciseHours: number[];
 }
-
-const parseCmdArgs = (args: string[]): CmdArgs => {
+const parseArguments = (args: string[]): CmdArgs => {
   if (args.length < 3)
     throw new Error("Not enough arguments, provide target value");
 
@@ -66,13 +65,17 @@ const calculateExercises = (
   };
 };
 
-try {
-  const { target, exerciseHours } = parseCmdArgs(process.argv);
-  console.log(calculateExercises(exerciseHours, target));
-} catch (error: unknown) {
-  let errorMessage = "Something bad happened.";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
+if (process.argv[1] === import.meta.filename) {
+  try {
+    const { target, exerciseHours } = parseArguments(process.argv);
+    console.log(calculateExercises(exerciseHours, target));
+  } catch (error: unknown) {
+    let errorMessage = "Something bad happened.";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
+
+export default calculateExercises;
