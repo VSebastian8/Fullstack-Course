@@ -40,7 +40,7 @@ const calculateExercises = (
 ): Result => {
   const average: number =
     exerciseHours.reduce((acc, x) => acc + x, 0) / exerciseHours.length;
-  let ratingDesc: RatingDesc =
+  const ratingDesc: RatingDesc =
     average >= target
       ? {
           rating: 3,
