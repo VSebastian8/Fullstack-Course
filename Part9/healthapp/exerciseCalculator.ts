@@ -1,3 +1,25 @@
+interface CmdArgs {
+  target: number;
+  exerciseHours: number[];
+}
+
+const parseCmdArgs = (args: string[]): CmdArgs => {
+  if (args.length < 3)
+    throw new Error("Not enough arguments, provide target value");
+
+  if (args.length < 4)
+    throw new Error("Not enough arguments, provide nonempty array");
+
+  if (args.slice(2).some((arg) => isNaN(Number(arg)))) {
+    throw new Error("Provided values were not numbers!");
+  } else {
+    return {
+      target: Number(args[2]),
+      exerciseHours: args.slice(3).map(Number),
+    };
+  }
+};
+
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -44,4 +66,13 @@ const calculateExercises = (
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const { target, exerciseHours } = parseCmdArgs(process.argv);
+  console.log(calculateExercises(exerciseHours, target));
+} catch (error: unknown) {
+  let errorMessage = "Something bad happened.";
+  if (error instanceof Error) {
+    errorMessage += " Error: " + error.message;
+  }
+  console.log(errorMessage);
+}
