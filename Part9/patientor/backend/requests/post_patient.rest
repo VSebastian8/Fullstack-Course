@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+    "name": "Brandon Rogers",
+    "dateOfBirth": "1975-01-30",
+    "ssn": "300279-77A",
+    "gender": "male",
+    "occupation": "Writter"
+}

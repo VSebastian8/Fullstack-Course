@@ -2,6 +2,7 @@ import express from "express";
 import diagnosisRouter from "./routes/diagnoses.ts";
 import patientRouter from "./routes/patients.ts";
 const app = express();
+
 app.use(express.json());
 
 const PORT = 3001;
