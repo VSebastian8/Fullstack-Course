@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useMatch } from "react-router-dom";
-import patientService from "../services/patients";
-import { Patient } from "../types";
+import patientService from "../../services/patients";
+import { type Patient } from "../../types";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import TransgenderIcon from "@mui/icons-material/Transgender";
+import Entry from "./Entry";
 
 const PatientPage = () => {
   const match = useMatch("patients/:id");
@@ -38,7 +39,15 @@ const PatientPage = () => {
       </h2>
       <p>ssn: {patient.ssn}</p>
       <p>occupation: {patient.occupation}</p>
-      <p>date of birth: {patient.dateOfBirth}</p>
+      {patient.dateOfBirth ? (
+        <p>date of birth: {patient.dateOfBirth}</p>
+      ) : (
+        <></>
+      )}
+      <h4>entries</h4>
+      {patient.entries.map((entry) => (
+        <Entry key={entry.id} entry={entry} />
+      ))}
     </>
   );
 };
