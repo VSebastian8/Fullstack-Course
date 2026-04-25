@@ -1,0 +1,11 @@
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+    "description": "Quick health check",
+    "date": "2025-01-30",
+    "specialist": "MD House",
+    "diagnosisCodes": ["H54.7", "Z74.3"],
+    "type": "HealthCheck",
+    "healthCheckRating": 3
+}

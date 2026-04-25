@@ -1,7 +1,11 @@
 import express, { type Response } from "express";
 import patientsService from "../services/patientsService.ts";
 import type { Patient } from "../types.ts";
-import { type NonSensitivePatient, NewPatientSchema } from "../types.ts";
+import {
+  type NonSensitivePatient,
+  NewEntrySchema,
+  NewPatientSchema,
+} from "../types.ts";
 import { z } from "zod";
 
 const router = express.Router();
@@ -20,6 +24,27 @@ router.post("/", (req, res) => {
     const newPatient = NewPatientSchema.parse(req.body);
     const addedPatient = patientsService.addPatient(newPatient);
     res.json(addedPatient);
+  } catch (error: unknown) {
+    if (error instanceof z.ZodError) {
+      res.status(400).send({ error: error.issues });
+    } else {
+      res.status(400).send({ error: "unknown error" });
+    }
+  }
+  res.json();
+});
+
+router.post("/:id/entries", (req, res) => {
+  try {
+    const id = req.params.id;
+    const patient = patientsService.getPatients().find((p) => p.id === id);
+    if (!patient) {
+      res.status(404).send({ error: "patient not found" });
+    } else {
+      const newEntry = NewEntrySchema.parse(req.body);
+      const addedEntry = patientsService.addEntry(newEntry, patient);
+      res.json(addedEntry);
+    }
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       res.status(400).send({ error: error.issues });
