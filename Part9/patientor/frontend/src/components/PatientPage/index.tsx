@@ -1,15 +1,53 @@
 import { useEffect, useState } from "react";
 import { useMatch } from "react-router-dom";
 import patientService from "../../services/patients";
-import { type Patient } from "../../types";
+import { FormEntry, type Patient } from "../../types";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import Entry from "./Entry";
+import AddEntryModal from "../AddEntryModal";
+import { Button } from "@mui/material";
+import axios from "axios";
 
 const PatientPage = () => {
   const match = useMatch("patients/:id");
   const [patient, setPatient] = useState<Patient | null>(null);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  const submitNewEntry = async (values: FormEntry) => {
+    try {
+      if (!patient) return;
+      console.log(values);
+      const entry = await patientService.addEntry(patient.id, values);
+      setPatient({ ...patient, entries: patient.entries.concat(entry) });
+      setModalOpen(false);
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        if (e?.response?.data && typeof e?.response?.data === "string") {
+          const message = e.response.data.replace(
+            "Something went wrong. Error: ",
+            "",
+          );
+          console.error(message);
+          setError(message);
+        } else {
+          setError("Unrecognized axios error");
+        }
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
+  };
 
   useEffect(() => {
     const id = match?.params.id;
@@ -21,6 +59,7 @@ const PatientPage = () => {
       void fetchPatient();
     }
   }, [match]);
+
   if (!patient) return <div>loading</div>;
   const genderIcon = (() => {
     switch (patient.gender) {
@@ -48,6 +87,15 @@ const PatientPage = () => {
       {patient.entries.map((entry) => (
         <Entry key={entry.id} entry={entry} />
       ))}
+      <AddEntryModal
+        modalOpen={modalOpen}
+        onSubmit={submitNewEntry}
+        error={error}
+        onClose={closeModal}
+      />
+      <Button variant="contained" onClick={() => openModal()}>
+        Add New Entry
+      </Button>
     </>
   );
 };
