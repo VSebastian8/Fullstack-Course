@@ -15,5 +15,6 @@ Progress:
 - [x] [Part 7](./Part7/) took **9h**
 - [x] [Part 8](./Part8/) took **10h**
 - [x] [Part 9](./Part9/) took **13h**
+- [ ] [Part 10](./Part10/) took **?h**
 
 Total hours: **70h**
